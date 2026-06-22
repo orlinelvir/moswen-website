@@ -34,6 +34,7 @@
     var gsapA2 = () => {
         if ($(".gsap-anime-2").length) {
             const cards = document.querySelectorAll(".flip-image");
+            if (!cards.length) return;
 
             function animate() {
                 const isMobile = window.innerWidth < 767;
@@ -297,31 +298,20 @@
         if ($(".preloader").length) {
             var innerBars = document.querySelectorAll(".inner-bar");
             var increment = 0;
+            var isLoaded = false;
+            var preloaderFinished = false;
 
-            function animateBars() {
-                for (var i = 0; i < 2; i++) {
-                    var randomWidth = Math.floor(Math.random() * 101);
-                    gsap.to(innerBars[i + increment], {
-                        width: randomWidth + "%",
-                        duration: 0.3,
-                        ease: "none",
-                    });
-                }
+            function finishPreloader() {
+                if (preloaderFinished) return;
+                preloaderFinished = true;
 
-                gsap.delayedCall(0.3, function () {
-                    for (var i = 0; i < 2; i++) {
-                        gsap.to(innerBars[i + increment], {
-                            width: "100%",
-                            duration: 0.3,
-                            ease: "none",
-                        });
-                    }
-
-                    increment += 2;
-
-                    if (increment < innerBars.length) {
-                        animateBars();
-                    } else {
+                gsap.killTweensOf(innerBars);
+                gsap.to(innerBars, {
+                    width: "100%",
+                    duration: 0.2,
+                    ease: "power1.out",
+                    overwrite: "auto",
+                    onComplete: () => {
                         var preloaderTL = gsap.timeline({
                             onComplete: () => {
                                 $(".preloader").remove();
@@ -338,9 +328,61 @@
                 });
             }
 
+            function animateBars() {
+                if (isLoaded) {
+                    finishPreloader();
+                    return;
+                }
+
+                if (increment >= innerBars.length) {
+                    finishPreloader();
+                    return;
+                }
+
+                for (var i = 0; i < 2; i++) {
+                    var randomWidth = Math.floor(Math.random() * 101);
+                    gsap.to(innerBars[i + increment], {
+                        width: randomWidth + "%",
+                        duration: 0.3,
+                        ease: "none",
+                    });
+                }
+
+                gsap.delayedCall(0.3, function () {
+                    if (isLoaded) {
+                        finishPreloader();
+                        return;
+                    }
+
+                    for (var i = 0; i < 2; i++) {
+                        gsap.to(innerBars[i + increment], {
+                            width: "100%",
+                            duration: 0.3,
+                            ease: "none",
+                        });
+                    }
+
+                    increment += 2;
+                    animateBars();
+                });
+            }
+
+            animateBars();
+
             $(window).on("load", function () {
-                animateBars();
+                isLoaded = true;
+                finishPreloader();
             });
+
+            if (document.readyState === "complete") {
+                isLoaded = true;
+                finishPreloader();
+            }
+
+            setTimeout(function () {
+                isLoaded = true;
+                finishPreloader();
+            }, 2500);
         } else {
             runAnimations();
         }
@@ -694,7 +736,7 @@
         loader();
     });
 
-    $(window).on("load", function () {
+    const handleHashScroll = function () {
         const hash = window.location.hash;
         if (hash && $(hash).length) {
             setTimeout(() => {
@@ -705,5 +747,11 @@
                 });
             }, 800);
         }
-    });
+    };
+
+    if (document.readyState === "complete") {
+        handleHashScroll();
+    } else {
+        $(window).on("load", handleHashScroll);
+    }
 })(jQuery);

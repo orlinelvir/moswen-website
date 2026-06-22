@@ -1,4 +1,4 @@
-$(window).on("load", function () {
+const initCarouselSwipers = function () {
     $(".tf-swiper").each(function (index, element) {
         var $this = $(element);
         var laptop = $this.data("laptop") || 1;
@@ -138,7 +138,7 @@ $(window).on("load", function () {
                 $(".tf-swiper .card_product--V01.style_2").eq(slideIndex).toggleClass("clicked");
             });
     });
-});
+};
 
 if ($(".swiper-process").length > 0) {
     let swiper = null;
@@ -211,7 +211,7 @@ if ($(".slider-service-wrap").length > 0) {
 }
 
 /*-- Slick Slide --*/
-window.onload = function () {
+const initCarouselSlick = function () {
     if (window.jQuery) {
         jQuery.event.special.touchstart = {
             setup: function (_, ns, handle) {
@@ -274,3 +274,13 @@ window.onload = function () {
         $nav.trigger("afterChange", [$nav.slick("getSlick"), 0]);
     }
 };
+
+if (document.readyState === "complete") {
+    initCarouselSwipers();
+    initCarouselSlick();
+} else {
+    $(window).on("load", function () {
+        initCarouselSwipers();
+        initCarouselSlick();
+    });
+}

@@ -15,6 +15,9 @@
    */
 
 (function ($) {
+    if (document.readyState === "complete") {
+        window.loaded = true;
+    }
     $(window).on("load", function () {
         window.loaded = true;
     });

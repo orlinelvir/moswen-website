@@ -34,8 +34,8 @@
 :root {
   --white: #ffffff;
   --black: #000000;
-  --primary: #f9a23e;
-  --primary-rgb: 249, 162, 62;
+  --primary: #f6a332;
+  --primary-rgb: 246, 163, 50;
   --white-50: #FFFFFF80;
   --white-64: #FFFFFFA3;
   --white-32: #ffffff52;
@@ -51,7 +51,7 @@
 }
 
 [data-color-primary=color-primary-1] {
-  --primary: #f9a23e;
+  --primary: #f6a332;
 }
 
 [data-color-primary=color-primary-2] {
@@ -6733,7 +6733,7 @@ button.animate-btn::after,
   position: relative;
 }
 .settings-color .choose-item:nth-child(1) {
-  background: #f9a23e;
+  background: #f6a332;
 }
 .settings-color .choose-item:nth-child(2) {
   background: #f8c736;
@@ -7416,4 +7416,4 @@ button.animate-btn::after,
 }
 
 /*# sourceMappingURL=styles.css.map */
-`n/* Custom Mega Menu */`n.mega-menu-custom { min-width: 600px !important; padding: 20px !important; display: grid !important; grid-template-columns: 1fr 1fr; gap: 15px; background: var(--black) !important; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; } .mega-menu-custom li { margin: 0 !important; padding: 0 !important; } .mega-menu-custom a { display: flex !important; align-items: center; gap: 15px; padding: 15px !important; border-radius: 8px; background: rgba(255,255,255,0.02); transition: all 0.3s ease; } .mega-menu-custom a:hover { background: rgba(249, 162, 62, 0.05); transform: translateY(-2px); } .mega-menu-custom .mm-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 16px; color: var(--white); transition: all 0.3s ease; } .mega-menu-custom a:hover .mm-icon { background: var(--primary); color: #fff; } .mega-menu-custom .mm-text { display: flex; flex-direction: column; } .mega-menu-custom .mm-title { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 3px; } .mega-menu-custom a.text-primary .mm-title { color: var(--primary); } .mega-menu-custom .mm-desc { font-size: 11px; color: var(--white-64); text-transform: none; font-family: var(--font-family-body); }
+`n/* Custom Mega Menu */`n.mega-menu-custom { min-width: 600px !important; padding: 20px !important; display: grid !important; grid-template-columns: 1fr 1fr; gap: 15px; background: var(--black) !important; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; } .mega-menu-custom li { margin: 0 !important; padding: 0 !important; } .mega-menu-custom a { display: flex !important; align-items: center; gap: 15px; padding: 15px !important; border-radius: 8px; background: rgba(255,255,255,0.02); transition: all 0.3s ease; } .mega-menu-custom a:hover { background: rgba(246, 163, 50, 0.05); transform: translateY(-2px); } .mega-menu-custom .mm-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 16px; color: var(--white); transition: all 0.3s ease; } .mega-menu-custom a:hover .mm-icon { background: var(--primary); color: #fff; } .mega-menu-custom .mm-text { display: flex; flex-direction: column; } .mega-menu-custom .mm-title { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 3px; } .mega-menu-custom a.text-primary .mm-title { color: var(--primary); } .mega-menu-custom .mm-desc { font-size: 11px; color: var(--white-64); text-transform: none; font-family: var(--font-family-body); }

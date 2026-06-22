@@ -82,7 +82,9 @@
     -------------------------------------------------------------------------*/
     var cursorTrail = () => {
         const canvas = document.getElementById("trail");
+        if (!canvas) return;
         const ctx = canvas.getContext("2d");
+        if (!ctx) return;
         let w = window.innerWidth,
             h = window.innerHeight;
         canvas.width = w;
