@@ -1,0 +1,49 @@
+LISTA DE REQUERIMIENTOS - MOSWEN DESIGNS
+Para: Samantha Chavez (Diseñadora Gráfica)
+
+Este documento detalla los activos visuales e información estratégica necesarios para completar la transición de la plantilla "Davies" a la marca oficial "Moswen Designs".
+
+---
+1. IDENTIDAD VISUAL (LOGOS)
+---
+[ ] Logo Principal: Versiones en SVG (color, blanco y negro) para fondos claros y oscuros.
+[ ] Isotipo/Símbolo: El icono de la marca por separado para usos minimalistas.
+[ ] Favicon: El icono de la pestaña del navegador en formato .svg o .png (múltiples tamaños).
+[ ] Guía de Estilo: Definición final de colores (HEX/RGB) y tipografías oficiales.
+
+---
+2. RECURSOS MULTIMEDIA (BANNER & HERO)
+---
+[ ] Video de Fondo Hero: Un clip de alta calidad (preferible .webm o .mp4 optimizado) que represente la esencia de Moswen (actualmente es un pasillo genérico).
+[ ] Video "Sobre Nosotros": Video corto para la sección de biografía (reemplazar davies-video.mp4).
+[ ] Imágenes de Servicios: 4 imágenes principales (aprox. 1200x800px) para:
+    - Desarrollo Web y Apps
+    - Identidad Visual y Branding
+    - Marketing y Estrategia
+    - Consultoría de Negocios
+
+---
+3. PORTAFOLIO Y CASOS DE ÉXITO
+---
+[ ] Mockups de Proyectos: Imágenes reales de trabajos anteriores (web, logos, campañas) para crear la sección de galería.
+[ ] Logos de Clientes/Aliados: Versiones en blanco o gris de logos de empresas con las que han trabajado (Social Proof).
+
+---
+4. EQUIPO Y SOCIAL
+---
+[ ] Fotos del Equipo: Retratos profesionales de los miembros mencionados (David, Elena, Marcos) o avatares personalizados.
+[ ] Fotos de Testimonios: Imágenes de perfil reales para los testimonios de Carlos, Lucía y Sofía (o los que se decidan usar).
+
+---
+5. INFORMACIÓN DE NEGOCIO (PARA REDACCIÓN)
+---
+Favor de confirmar o proveer:
+[ ] Servicios: ¿Hay algún entregable específico que debamos resaltar en cada servicio?
+[ ] Precios: ¿Los planes de $640, $1,280 y $2,560 son reales o solo ejemplos?
+[ ] FAQs: ¿Hay preguntas frecuentes específicas que debamos agregar?
+[ ] Datos de Contacto: Correo oficial, teléfono y dirección física (si aplica).
+[ ] Enlaces Sociales: URLs finales de Instagram, LinkedIn, X, etc.
+
+---
+Generado por Gemini CLI para Moswen Designs.
+Fecha: 7 de Junio, 2026.
