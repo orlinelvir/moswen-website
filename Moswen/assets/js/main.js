@@ -227,6 +227,111 @@
             }
         });
     };
+    /* Nice Select Hidden Input Sync
+    -------------------------------------------------------------------------*/
+    var syncNiceSelectHidden = function () {
+        $(document).on('click.nice_select_sync', '.nice-select .option:not(.disabled)', function () {
+            var $dropdown = $(this).closest('.nice-select');
+            var $wrap = $dropdown.closest('.nc-wrap');
+            var selectedValue = $(this).text().trim();
+            $wrap.find('input[type="hidden"]').val(selectedValue);
+        });
+    };
+    /* Form Submit Odoo CRM Integration
+    -------------------------------------------------------------------------*/
+    var initFormCrmSubmit = function () {
+        $(".form-cta").on("submit", function (e) {
+            e.preventDefault();
+            var $form = $(this);
+            var $button = $form.find("button[type='submit']");
+            var originalText = $button.html();
+
+            // Gather inputs
+            var formData = {};
+            $form.find("input[name], textarea[name], select[name]").each(function () {
+                var name = $(this).attr("name");
+                var val = $(this).val();
+                formData[name] = val;
+            });
+
+            // Prevent double submission
+            $button.prop("disabled", true).html('<span class="text-caption">ENVIANDO...</span>');
+
+            // Send to our secure Vercel endpoint
+            fetch("/api/crm", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(function (response) {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error("Error en el servidor");
+            })
+            .then(function (data) {
+                alert("¡Gracias! Tu mensaje ha sido enviado con éxito y un asesor te contactará.");
+                $form[0].reset();
+                // Reset select current text if any
+                $form.find(".nice-select .current").each(function () {
+                    var placeholder = $(this).siblings(".list").find(".option.disabled").text() || "Selecciona...";
+                    $(this).text(placeholder);
+                });
+                $form.find('input[type="hidden"]').val('');
+            })
+            .catch(function (error) {
+                console.error("Error submitting form:", error);
+                alert("Hubo un error al enviar tu mensaje. Por favor escríbenos directamente a info@moswendesigns.com.");
+            })
+            .finally(function () {
+                $button.prop("disabled", false).html(originalText);
+            });
+        });
+    };
+    /* Scroll Link (Smooth Scroll for Anchors under GSAP/ScrollSmoother)
+    -------------------------------------------------------------------------*/
+    var initScrollLinks = function () {
+        $(document).on("click", "a[href^='#'], a[href^='/#']", function (e) {
+            var href = $(this).attr("href");
+            
+            // If it's a link to another page (like /#contactScroll) but we are already on the homepage
+            var targetId = href;
+            if (href.startsWith("/#")) {
+                var path = window.location.pathname;
+                if (path === "/" || path === "/index.html" || path.endsWith("/index") || path === "") {
+                    targetId = href.substring(1); // Extract "#contactScroll"
+                } else {
+                    return; // Let the browser navigate normally to the other page
+                }
+            }
+            
+            if (targetId === "#" || targetId === "") return;
+            
+            var $target = $(targetId);
+            if ($target.length > 0) {
+                e.preventDefault();
+                
+                // If ScrollSmoother is active, use its scrollTo method
+                if (typeof ScrollSmoother !== "undefined" && ScrollSmoother.get()) {
+                    ScrollSmoother.get().scrollTo($target[0], true);
+                } else if (typeof gsap !== "undefined" && gsap.to) {
+                    // Fallback to GSAP ScrollTo
+                    gsap.to(window, {
+                        duration: 1,
+                        scrollTo: targetId,
+                        ease: "power2.out"
+                    });
+                } else {
+                    // Standard jQuery animate fallback
+                    $("html, body").animate({
+                        scrollTop: $target.offset().top
+                    }, 800);
+                }
+            }
+        });
+    };
 
     // Dom Ready
     $(function () {
@@ -238,5 +343,8 @@
         counterOdo();
         openMbMenu();
         clickActive();
+        syncNiceSelectHidden();
+        initFormCrmSubmit();
+        initScrollLinks();
     });
 })(jQuery);

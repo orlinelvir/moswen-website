@@ -133,7 +133,7 @@
                                     </li>
                                     <li class="menu-item"><a href="reparacion-credito" class="item-link link text-caption">REPARACIÓN DE CRÉDITO</a></li>
                                     <li class="menu-item"><a href="nosotros" class="item-link link text-caption">NOSOTROS</a></li>
-                                    <li class="menu-item"><a href="#" class="item-link link text-caption">CONTACTO</a></li>
+                                    <li class="menu-item"><a href="#contactScroll" class="item-link link text-caption">CONTACTO</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -1121,17 +1121,18 @@
                             <div class="form-content">
                                 <div class="tf-grid-layout sm-col-2">
                                     <fieldset class="tf-field">
-                                        <input class="tf-input" type="text" placeholder="Tu Nombre" required>
+                                        <input class="tf-input" type="text" name="nombre" placeholder="Tu Nombre" required>
                                         <label class="tf-lable">Nombre <span class="text-primary">*</span></label>
                                     </fieldset>
                                     <fieldset class="tf-field">
-                                        <input class="tf-input" type="email" placeholder="Tu Email" required>
+                                        <input class="tf-input" type="email" name="email" placeholder="Tu Email" required>
                                         <label class="tf-lable">Email <span class="text-primary">*</span></label>
                                     </fieldset>
                                 </div>
                                 <div class="tf-grid-layout sm-col-2">
                                     <div class="nc-wrap">
                                         <p class="select-label fs-14 text-white-64 d-sm-none">Selecciona una opción <span class="text-primary">*</span></p>
+                                        <input type="hidden" name="interes" required>
                                         <div class="nice-select">
                                             <span class="current letter-space--1">Estoy interesado en...</span>
                                             <ul class="list">
@@ -1145,6 +1146,7 @@
                                     </div>
                                     <div class="nc-wrap">
                                         <p class="select-label fs-14 text-white-64 d-sm-none">Presupuesto estimado <span class="text-primary">*</span></p>
+                                        <input type="hidden" name="presupuesto" required>
                                         <div class="nice-select">
                                             <span class="current letter-space--1">Presupuesto en USD</span>
                                             <ul class="list">
@@ -1158,7 +1160,7 @@
                                     </div>
                                 </div>
                                 <fieldset class="tf-field">
-                                    <input class="tf-input" type="text" placeholder="Cuéntanos sobre tu proyecto" required>
+                                    <input class="tf-input" type="text" name="detalles" placeholder="Cuéntanos sobre tu proyecto" required>
                                     <label class="tf-lable">Detalles del proyecto</label>
                                 </fieldset>
                             </div>
@@ -1339,7 +1341,7 @@
     <script src="assets/js/ScrollToPlugin.min.js"></script>
     <script src="assets/js/gsapAnimation.js"></script>
 
-    <script src="assets/js/main.js"></script>
+    <script src="assets/js/main.js?v=1.1"></script>
 </body>
 
 </html>

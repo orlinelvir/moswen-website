@@ -1100,17 +1100,18 @@
                             <div class="form-content">
                                 <div class="tf-grid-layout sm-col-2">
                                     <fieldset class="tf-field">
-                                        <input class="tf-input" type="text" placeholder required>
+                                        <input class="tf-input" type="text" name="nombre" placeholder required>
                                         <label class="tf-lable">Name <span class="text-primary">*</span></label>
                                     </fieldset>
                                     <fieldset class="tf-field">
-                                        <input class="tf-input" type="email" placeholder required>
+                                        <input class="tf-input" type="email" name="email" placeholder required>
                                         <label class="tf-lable">Email <span class="text-primary">*</span></label>
                                     </fieldset>
                                 </div>
                                 <div class="tf-grid-layout sm-col-2">
                                     <div class="nc-wrap">
                                         <p class="select-label fs-14 text-white-64 d-sm-none">Select an option <span class="text-primary">*</span></p>
+                                        <input type="hidden" name="interes" required>
                                         <div class="nice-select">
                                             <span class="current letter-space--1">You are interested in</span>
                                             <ul class="list">
@@ -1132,6 +1133,7 @@
                                     <div class="nc-wrap">
                                         <p class="select-label fs-14 text-white-64 d-sm-none">Select your budget <span class="text-primary">*</span>
                                         </p>
+                                        <input type="hidden" name="presupuesto" required>
                                         <div class="nice-select">
                                             <span class="current letter-space--1">Budget in USD</span>
                                             <ul class="list">
@@ -1152,7 +1154,7 @@
                                     </div>
                                 </div>
                                 <fieldset class="tf-field">
-                                    <input class="tf-input" type="text" placeholder required>
+                                    <input class="tf-input" type="text" name="detalles" placeholder required>
                                     <label class="tf-lable">Project details</label>
                                 </fieldset>
                             </div>
@@ -1355,7 +1357,7 @@
     <script src="assets/js/odometer.min.js"></script>
     <script src="assets/js/jquery.nice-select.min.js"></script>
     <script src="assets/js/unicornStudio.umd.js"></script>
-    <script src="assets/js/main.js"></script>
+    <script src="assets/js/main.js?v=1.1"></script>
     <script>
         UnicornStudio.init();
     </script>
