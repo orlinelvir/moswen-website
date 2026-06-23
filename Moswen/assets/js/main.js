@@ -332,6 +332,85 @@
             }
         });
     };
+    /* WhatsApp Floating Widget Injection
+    -------------------------------------------------------------------------*/
+    var injectWhatsAppWidget = function () {
+        var waHtml = `
+            <a href="https://wa.me/50493157191?text=Hola%20Moswen%20Designs,%20me%20gustaría%20solicitar%20información." 
+               class="whatsapp-float" 
+               target="_blank" 
+               rel="noopener noreferrer" 
+               title="Chatea con nosotros">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+        `;
+        
+        var waStyle = `
+            <style>
+                .whatsapp-float {
+                    position: fixed;
+                    bottom: 40px;
+                    right: 40px;
+                    background-color: #25d366;
+                    color: #fff;
+                    border-radius: 50px;
+                    text-align: center;
+                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+                    z-index: 9999;
+                    width: 60px;
+                    height: 60px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.3s ease;
+                    text-decoration: none;
+                }
+                .whatsapp-float i {
+                    font-size: 32px;
+                }
+                .whatsapp-float:hover {
+                    background-color: #128c7e;
+                    transform: scale(1.1);
+                    color: #fff;
+                }
+                .whatsapp-float::before {
+                    content: "";
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                    background-color: #25d366;
+                    opacity: 0.7;
+                    z-index: -1;
+                    animation: wa-pulse 2s infinite;
+                }
+                @keyframes wa-pulse {
+                    0% {
+                        transform: scale(1);
+                        opacity: 0.7;
+                    }
+                    100% {
+                        transform: scale(1.6);
+                        opacity: 0;
+                    }
+                }
+                @media (max-width: 767px) {
+                    .whatsapp-float {
+                        bottom: 20px;
+                        right: 20px;
+                        width: 50px;
+                        height: 50px;
+                    }
+                    .whatsapp-float i {
+                        font-size: 26px;
+                    }
+                }
+            </style>
+        `;
+        
+        $("head").append(waStyle);
+        $("body").append(waHtml);
+    };
 
     // Dom Ready
     $(function () {
@@ -346,5 +425,6 @@
         syncNiceSelectHidden();
         initFormCrmSubmit();
         initScrollLinks();
+        injectWhatsAppWidget();
     });
 })(jQuery);
