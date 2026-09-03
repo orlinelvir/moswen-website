@@ -1,6 +1,7 @@
 /**
- * Vercel Serverless Function that receives contact form submissions and
- * emails them to the Moswen Designs team via Resend.
+ * Vercel Serverless Function that receives contact form submissions,
+ * emails them to the Moswen Designs team via Resend, and sends a branded
+ * confirmation email back to the lead.
  * Exposes a POST endpoint at /api/crm.
  */
 
@@ -19,6 +20,13 @@ function escapeHtml(unsafe) {
   });
 }
 
+const LOGO_URL = 'https://moswendesigns.com/assets/images/logo/logo-email.png';
+
+const SOCIAL_LINKS = [
+  { label: 'Instagram', url: 'https://www.instagram.com/moswen_designs/' },
+  { label: 'Facebook', url: 'https://www.facebook.com/profile.php?id=61559017957866' },
+];
+
 const FIELD_LABELS = {
   nombre: 'Nombre completo',
   email: 'Correo electrónico',
@@ -30,7 +38,8 @@ const FIELD_LABELS = {
   mensaje: 'Mensaje',
 };
 
-function buildEmailHtml(body) {
+// Internal notification email (to the Moswen team)
+function buildTeamEmailHtml(body) {
   const rows = Object.entries(FIELD_LABELS)
     .filter(([key]) => body[key])
     .map(([key, label]) => `
@@ -42,9 +51,76 @@ function buildEmailHtml(body) {
 
   return `
     <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">
+      <div style="background-color:#111111;padding:16px;text-align:center;margin-bottom:20px;">
+        <img src="${LOGO_URL}" width="60" alt="Moswen Design's" style="display:block;margin:0 auto;width:60px;height:auto;border:0;">
+      </div>
       <h2 style="color:#f6a332;">Nuevo lead desde el sitio web</h2>
       <table style="width:100%;border-collapse:collapse;">${rows}</table>
     </div>`;
+}
+
+// Branded confirmation email sent back to the lead/client
+function buildClientConfirmationHtml(body) {
+  const nombre = escapeHtml(body.nombre || 'ahí');
+  const interes = body.interes ? escapeHtml(body.interes) : null;
+
+  return `
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f4f4;padding:40px 0;font-family:Arial,Helvetica,sans-serif;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:#ffffff;border-radius:12px;overflow:hidden;">
+          <tr>
+            <td style="background-color:#111111;padding:28px 32px;text-align:center;">
+              <img src="${LOGO_URL}" width="90" alt="Moswen Design's" style="display:block;margin:0 auto;width:90px;height:auto;border:0;">
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:40px 36px 8px 36px;">
+              <h1 style="margin:0 0 16px 0;font-size:22px;color:#111111;">¡Hola, ${nombre}!</h1>
+              <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#333333;">
+                Gracias por contactar a <strong>Moswen Designs</strong>${interes ? `. Recibimos tu solicitud sobre <strong style="color:#f6a332;">${interes}</strong>` : ', recibimos tu mensaje'} y ya está en manos de nuestro equipo.
+              </p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f9f5ef;border-left:4px solid #f6a332;border-radius:6px;margin:24px 0;">
+                <tr>
+                  <td style="padding:18px 20px;font-size:14px;line-height:1.6;color:#333333;">
+                    <strong>¿Qué sigue?</strong><br>
+                    Un asesor revisará los detalles de tu proyecto y te contactará dentro de las próximas 24 horas hábiles para agendar tu sesión estratégica gratuita.
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:16px 0 32px 0;font-size:15px;line-height:1.6;color:#333333;">
+                Mientras tanto, puedes conocer más sobre cómo trabajamos en
+                <a href="https://moswendesigns.com" style="color:#f6a332;text-decoration:none;font-weight:600;">moswendesigns.com</a>.
+              </p>
+              <p style="margin:0 0 4px 0;font-size:15px;color:#333333;">Saludos,</p>
+              <p style="margin:0;font-size:15px;font-weight:700;color:#111111;">El equipo de Moswen Designs</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color:#111111;padding:24px 32px;text-align:center;">
+              <p style="margin:0 0 12px 0;font-size:12px;">
+                ${SOCIAL_LINKS.map(s => `<a href="${escapeHtml(s.url)}" style="color:#f6a332;text-decoration:none;font-weight:600;margin:0 8px;">${escapeHtml(s.label)}</a>`).join('<span style="color:#444444;">•</span>')}
+              </p>
+              <p style="margin:0 0 4px 0;font-size:12px;color:#888888;letter-spacing:1px;">© 2026 MOSWEN DESIGNS | AGENCIA TECNOLÓGICA Y CREATIVA</p>
+              <p style="margin:0;font-size:12px;color:#888888;">info@moswendesigns.com &nbsp;•&nbsp; moswendesigns.com</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>`;
+}
+
+async function sendResendEmail(apiKey, payload) {
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+  return response;
 }
 
 module.exports = async (req, res) => {
@@ -86,28 +162,41 @@ module.exports = async (req, res) => {
 
     const subject = `Nuevo lead: ${body.nombre || body.email}${body.interes ? ` — ${body.interes}` : ''}`;
 
-    const resendResponse = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${resendApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: fromEmail,
-        to: [toEmail],
-        reply_to: body.email || undefined,
-        subject,
-        html: buildEmailHtml(body),
-      }),
+    const teamResponse = await sendResendEmail(resendApiKey, {
+      from: fromEmail,
+      to: [toEmail],
+      reply_to: body.email || undefined,
+      subject,
+      html: buildTeamEmailHtml(body),
     });
 
-    if (!resendResponse.ok) {
-      const errorText = await resendResponse.text();
-      console.error('Resend API error:', resendResponse.status, errorText);
+    if (!teamResponse.ok) {
+      const errorText = await teamResponse.text();
+      console.error('Resend API error (team notification):', teamResponse.status, errorText);
       return res.status(502).json({ error: 'No se pudo enviar el correo del lead.' });
     }
 
-    return res.status(200).json({ success: true });
+    // Best-effort confirmation email to the lead — failure here shouldn't fail the whole request,
+    // since the lead was already captured by the team notification above.
+    let confirmationSent = false;
+    if (body.email) {
+      try {
+        const clientResponse = await sendResendEmail(resendApiKey, {
+          from: fromEmail,
+          to: [body.email],
+          subject: '¡Gracias por contactar a Moswen Designs!',
+          html: buildClientConfirmationHtml(body),
+        });
+        confirmationSent = clientResponse.ok;
+        if (!clientResponse.ok) {
+          console.error('Resend API error (client confirmation):', clientResponse.status, await clientResponse.text());
+        }
+      } catch (confirmationError) {
+        console.error('Error sending client confirmation email:', confirmationError);
+      }
+    }
+
+    return res.status(200).json({ success: true, confirmationSent });
   } catch (error) {
     console.error('Error in Vercel CRM proxy function:', error);
     return res.status(500).json({ error: 'Error interno del servidor al procesar el formulario.' });
