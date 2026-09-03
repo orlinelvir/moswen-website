@@ -237,7 +237,7 @@
             $wrap.find('input[type="hidden"]').val(selectedValue);
         });
     };
-    /* Form Submit Odoo CRM Integration
+    /* Form Submit — sends lead to /api/crm (Resend email notification)
     -------------------------------------------------------------------------*/
     var initFormCrmSubmit = function () {
         $(".form-cta").on("submit", function (e) {
