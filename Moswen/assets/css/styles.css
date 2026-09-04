@@ -1064,6 +1064,12 @@ h6,
     padding-bottom: 60px;
   }
 }
+/* Two stacked sections each add their own top/bottom padding, doubling the
+   gap between them. Drop the second section's top padding so the boundary
+   gets a single flat-spacing gap instead of two stacked ones. */
+section.flat-spacing + section.flat-spacing {
+  padding-top: 0;
+}
 
 .flat-spacing-2 {
   padding-top: 60px;
