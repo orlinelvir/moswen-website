@@ -123,6 +123,68 @@ async function sendResendEmail(apiKey, payload) {
   return response;
 }
 
+function splitName(fullName) {
+  const parts = String(fullName || '').trim().split(/\s+/);
+  return {
+    firstName: parts[0] || '',
+    lastName: parts.slice(1).join(' ') || '',
+  };
+}
+
+// Creates a Person + Note (with the lead's message) in Twenty CRM.
+// Best-effort: any failure here is logged but never fails the request,
+// since the team notification email above is the source of truth for the lead.
+async function createTwentyLead(apiUrl, apiKey, body) {
+  const twentyFetch = (path, payload) =>
+    fetch(`${apiUrl}/rest/${path}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+  const personResponse = await twentyFetch('people', {
+    name: splitName(body.nombre),
+    emails: body.email ? { primaryEmail: body.email } : undefined,
+    phones: body.telefono ? { primaryPhoneNumber: body.telefono } : undefined,
+  });
+
+  if (!personResponse.ok) {
+    throw new Error(`Twenty createPerson failed (${personResponse.status}): ${await personResponse.text()}`);
+  }
+
+  const personData = await personResponse.json();
+  const personId = personData.data.createPerson.id;
+
+  const noteLines = Object.entries(FIELD_LABELS)
+    .filter(([key]) => key !== 'nombre' && key !== 'email' && body[key])
+    .map(([key, label]) => `**${label}:** ${body[key]}`)
+    .join('\n\n');
+
+  const noteResponse = await twentyFetch('notes', {
+    title: `Lead del sitio web: ${body.nombre || body.email}`,
+    bodyV2: { markdown: noteLines || 'Sin detalles adicionales.' },
+  });
+
+  if (!noteResponse.ok) {
+    throw new Error(`Twenty createNote failed (${noteResponse.status}): ${await noteResponse.text()}`);
+  }
+
+  const noteData = await noteResponse.json();
+  const noteId = noteData.data.createNote.id;
+
+  const noteTargetResponse = await twentyFetch('noteTargets', {
+    noteId,
+    targetPersonId: personId,
+  });
+
+  if (!noteTargetResponse.ok) {
+    throw new Error(`Twenty createNoteTarget failed (${noteTargetResponse.status}): ${await noteTargetResponse.text()}`);
+  }
+}
+
 module.exports = async (req, res) => {
   // CORS Headers
   res.setHeader('Access-Control-Allow-Credentials', true);
@@ -196,7 +258,21 @@ module.exports = async (req, res) => {
       }
     }
 
-    return res.status(200).json({ success: true, confirmationSent });
+    // Best-effort: also register the lead in Twenty CRM. Failure here shouldn't
+    // fail the whole request — the team already got the notification email.
+    let crmSynced = false;
+    const twentyApiUrl = process.env.TWENTY_API_URL;
+    const twentyApiKey = process.env.TWENTY_API_KEY;
+    if (twentyApiUrl && twentyApiKey) {
+      try {
+        await createTwentyLead(twentyApiUrl, twentyApiKey, body);
+        crmSynced = true;
+      } catch (crmError) {
+        console.error('Error syncing lead to Twenty CRM:', crmError);
+      }
+    }
+
+    return res.status(200).json({ success: true, confirmationSent, crmSynced });
   } catch (error) {
     console.error('Error in Vercel CRM proxy function:', error);
     return res.status(500).json({ error: 'Error interno del servidor al procesar el formulario.' });
