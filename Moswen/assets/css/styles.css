@@ -1070,6 +1070,29 @@ h6,
 section.flat-spacing + section.flat-spacing {
   padding-top: 0;
 }
+/* .bg-img is meant to be a full-bleed decorative background behind a
+   section's content (see .section-pricing/.section-cta above). Custom
+   sections that reuse this wrapper without their own scoped rule left it
+   "position: static", so the tall background image sat in normal flow and
+   added hundreds of pixels of empty space below the real content. Apply
+   the same absolute-background behavior everywhere by default. */
+.bg-img {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+/* Same static-in-flow bug as .bg-img above, different name: a faint texture
+   overlay (opacity 0.1) meant to sit behind the credit-repair teaser. */
+.bg-grid-item {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
 
 .flat-spacing-2 {
   padding-top: 60px;
