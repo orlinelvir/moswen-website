@@ -272,6 +272,11 @@
                 throw new Error("Error en el servidor");
             })
             .then(function (data) {
+                if (typeof fbq === "function") {
+                    fbq("track", "Lead", {
+                        content_name: formData.interes || undefined
+                    });
+                }
                 alert("¡Gracias! Tu mensaje ha sido enviado con éxito y un asesor te contactará.");
                 $form[0].reset();
                 // Reset select current text if any
