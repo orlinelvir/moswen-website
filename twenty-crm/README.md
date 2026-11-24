@@ -1,6 +1,6 @@
 # Twenty CRM — self-host para Moswen Designs
 
-[Twenty](https://twenty.com) es un CRM open-source (código gratis para siempre). Lo que **sí cuesta dinero** es el servidor donde lo alojas — Twenty necesita un contenedor corriendo 24/7 con Postgres + Redis, no es un sitio estático como moswendesigns.com.
+[Twenty](https://twenty.com) es un CRM open-source (código gratis para siempre). Lo que **sí cuesta dinero** es el servidor donde lo alojas — Twenty necesita un contenedor corriendo 24/7 con Postgres + Redis, no es un sitio estático como moswen.app.
 
 ## Costo real (con pocos recursos)
 
@@ -29,6 +29,6 @@ Evita intentar correrlo en un free-tier tipo Railway/Render gratis: Twenty + Pos
 
 ## Después de tenerlo corriendo
 
-- **Dominio propio**: apunta un subdominio (ej. `crm.moswendesigns.com`) al servidor y pon un proxy con HTTPS (Caddy es el más simple — 3 líneas de config y certificado automático). Avísame cuando llegues aquí y te preparo el Caddyfile.
+- **Dominio propio**: apunta un subdominio (ej. `crm.moswen.app`) al servidor y pon un proxy con HTTPS (Caddy es el más simple — 3 líneas de config y certificado automático). Avísame cuando llegues aquí y te preparo el Caddyfile.
 - **Conectar los leads del sitio**: Twenty tiene API/webhooks — una vez esté en línea, puedo modificar `api/crm.js` para que además de mandar el correo por Resend, cree el contacto/oportunidad directo en Twenty.
 - **Backups**: el volumen `db-data` es donde vive toda tu información — configura un respaldo automático de ese volumen (snapshot del proveedor, o un cron con `pg_dump`) antes de meter clientes reales.

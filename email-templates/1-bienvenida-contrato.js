@@ -6,7 +6,7 @@
  *   1. Edita el objeto CLIENTE abajo con los datos de este cliente.
  *   2. En PowerShell, define las variables de entorno:
  *        $env:RESEND_API_KEY="re_xxxxxxxx"
- *        $env:RESEND_FROM_EMAIL="Moswen Designs <info@moswendesigns.com>"
+ *        $env:RESEND_FROM_EMAIL="Moswen Designs <info@moswen.app>"
  *        $env:CLIENT_EMAIL="correo-del-cliente@ejemplo.com"
  *   3. Corre: node 1-bienvenida-contrato.js
  */

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://moswendesigns.com/sitemap.xml
+Sitemap: https://moswen.app/sitemap.xml

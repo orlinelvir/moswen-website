@@ -288,7 +288,7 @@
             })
             .catch(function (error) {
                 console.error("Error submitting form:", error);
-                alert("Hubo un error al enviar tu mensaje. Por favor escríbenos directamente a info@moswendesigns.com.");
+                alert("Hubo un error al enviar tu mensaje. Por favor escríbenos directamente a info@moswen.app.");
             })
             .finally(function () {
                 $button.prop("disabled", false).html(originalText);

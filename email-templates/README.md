@@ -7,7 +7,7 @@ Scripts locales (Node 18+) para enviar los correos de cada etapa del proceso con
 1. Define las 3 variables de entorno una vez por sesión de terminal:
    ```powershell
    $env:RESEND_API_KEY="re_xxxxxxxx"
-   $env:RESEND_FROM_EMAIL="Moswen Designs <info@moswendesigns.com>"
+   $env:RESEND_FROM_EMAIL="Moswen Designs <info@moswen.app>"
    $env:CLIENT_EMAIL="correo-del-cliente@ejemplo.com"
    ```
 2. Abre la plantilla que necesites y edita el objeto `CLIENTE` de arriba con los datos de ese cliente.

@@ -4,7 +4,7 @@
  *
  * Usage (PowerShell):
  *   $env:RESEND_API_KEY="re_xxxxxxxx"
- *   $env:RESEND_FROM_EMAIL="Moswen Designs <info@moswendesigns.com>"
+ *   $env:RESEND_FROM_EMAIL="Moswen Designs <info@moswen.app>"
  *   $env:TEST_TO_EMAIL="tu-correo@ejemplo.com"
  *   node test-email.js
  *
@@ -26,7 +26,7 @@ function escapeHtml(unsafe) {
   });
 }
 
-const LOGO_URL = 'https://moswendesigns.com/assets/images/logo/logo-email.png';
+const LOGO_URL = 'https://moswen.app/assets/images/logo/logo-email.png';
 
 const SOCIAL_LINKS = [
   { label: 'Instagram', url: 'https://www.instagram.com/moswen_designs/' },
@@ -63,7 +63,7 @@ function buildClientConfirmationHtml({ nombre, interes }) {
               </table>
               <p style="margin:16px 0 32px 0;font-size:15px;line-height:1.6;color:#333333;">
                 Mientras tanto, puedes conocer más sobre cómo trabajamos en
-                <a href="https://moswendesigns.com" style="color:#f6a332;text-decoration:none;font-weight:600;">moswendesigns.com</a>.
+                <a href="https://moswen.app" style="color:#f6a332;text-decoration:none;font-weight:600;">moswen.app</a>.
               </p>
               <p style="margin:0 0 4px 0;font-size:15px;color:#333333;">Saludos,</p>
               <p style="margin:0;font-size:15px;font-weight:700;color:#111111;">El equipo de Moswen Designs</p>
@@ -75,7 +75,7 @@ function buildClientConfirmationHtml({ nombre, interes }) {
                 ${SOCIAL_LINKS.map(s => `<a href="${escapeHtml(s.url)}" style="color:#f6a332;text-decoration:none;font-weight:600;margin:0 8px;">${escapeHtml(s.label)}</a>`).join('<span style="color:#444444;">•</span>')}
               </p>
               <p style="margin:0 0 4px 0;font-size:12px;color:#888888;letter-spacing:1px;">© 2026 MOSWEN DESIGNS | AGENCIA TECNOLÓGICA Y CREATIVA</p>
-              <p style="margin:0;font-size:12px;color:#888888;">info@moswendesigns.com &nbsp;•&nbsp; moswendesigns.com</p>
+              <p style="margin:0;font-size:12px;color:#888888;">info@moswen.app &nbsp;•&nbsp; moswen.app</p>
             </td>
           </tr>
         </table>

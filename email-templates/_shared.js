@@ -6,7 +6,7 @@
  * Not deployed — these are internal tools run locally with `node <file>.js`.
  */
 
-const LOGO_URL = 'https://moswendesigns.com/assets/images/logo/logo-email.png';
+const LOGO_URL = 'https://moswen.app/assets/images/logo/logo-email.png';
 
 const SOCIAL_LINKS = [
   { label: 'Instagram', url: 'https://www.instagram.com/moswen_designs/' },
@@ -52,7 +52,7 @@ function wrapEmailBody(innerHtml) {
             <td style="background-color:#111111;padding:24px 32px;text-align:center;">
               <p style="margin:0 0 12px 0;font-size:12px;">${socialsHtml}</p>
               <p style="margin:0 0 4px 0;font-size:12px;color:#888888;letter-spacing:1px;">© 2026 MOSWEN DESIGNS | AGENCIA TECNOLÓGICA Y CREATIVA</p>
-              <p style="margin:0;font-size:12px;color:#888888;">info@moswendesigns.com &nbsp;•&nbsp; moswendesigns.com</p>
+              <p style="margin:0;font-size:12px;color:#888888;">info@moswen.app &nbsp;•&nbsp; moswen.app</p>
             </td>
           </tr>
         </table>
