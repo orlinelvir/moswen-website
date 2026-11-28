@@ -1,27 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://moswen.app/</loc>
+    <loc>https://www.moswen.app/</loc>
+    <lastmod>2026-11-25</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://moswen.app/desarrollo-web-apps</loc>
+    <loc>https://www.moswen.app/identidad-visual-branding</loc>
+    <lastmod>2026-11-25</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://moswen.app/identidad-visual-branding</loc>
+    <loc>https://www.moswen.app/desarrollo-web-apps</loc>
+    <lastmod>2026-11-25</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://moswen.app/marketing-estrategia-digital</loc>
+    <loc>https://www.moswen.app/marketing-estrategia-digital</loc>
+    <lastmod>2026-11-25</lastmod>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://moswen.app/consultoria-negocios</loc>
-    <priority>0.8</priority>
+    <loc>https://www.moswen.app/consultoria-negocios</loc>
+    <lastmod>2026-11-25</lastmod>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://moswen.app/nosotros</loc>
+    <loc>https://www.moswen.app/nosotros</loc>
+    <lastmod>2026-11-25</lastmod>
     <priority>0.7</priority>
   </url>
 </urlset>

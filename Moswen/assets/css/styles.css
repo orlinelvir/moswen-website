@@ -3920,6 +3920,46 @@ select option {
 .form-cta .tf-grid-layout {
   gap: 40px;
 }
+/* Native selects and consent checkbox in the contact forms */
+.form-cta .tf-field select.tf-input {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 42px;
+  padding: 16px 28px 3px 0;
+  font-size: 18px;
+  line-height: 22px;
+  color: var(--white);
+  background-color: transparent;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' fill='none' stroke='%23ffffff' stroke-width='1.5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 2px center;
+  border: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+.form-cta .tf-field select.tf-input:invalid {
+  color: rgba(255, 255, 255, 0.64);
+}
+.form-cta .tf-field select.tf-input option {
+  color: #111111;
+  background: #ffffff;
+}
+.form-cta .tf-field:has(select) .tf-lable {
+  font-size: 12px;
+  line-height: 16px;
+}
+@media (max-width: 575px) {
+  .form-cta .tf-field select.tf-input {
+    height: auto;
+    padding-top: 4px;
+    padding-bottom: 8px;
+  }
+}
 .form-cta .form-action {
   display: flex;
   justify-content: space-between;
@@ -5586,6 +5626,46 @@ button.animate-btn::after,
   .section-service-2 .wg-service-2:not(:first-child) {
     position: absolute;
     inset: 0;
+  }
+  /* The pinned section is ~938px tall at 1440px+ wide. On windows shorter than that
+     the bottom was cut off. Never let the pinned section exceed the window: the
+     content stays centred and only the empty padding is absorbed. Taller windows
+     are unchanged. */
+  .section-service-2.flat-spacing {
+    max-height: 100vh;
+  }
+}
+/* Short windows (laptops, small browser windows): the fixed header (112px) covers the
+   top of the pinned section, so centre the content in the space below it and scale it
+   down a little so the title and the buttons both stay visible. */
+@media (min-width: 1200px) and (max-height: 810px) {
+  .section-service-2.flat-spacing {
+    padding-top: 112px;
+    padding-bottom: 16px;
+    min-height: 100vh;
+  }
+  .section-service-2 > .container {
+    zoom: 0.95;
+  }
+}
+@media (min-width: 1200px) and (max-height: 770px) {
+  .section-service-2 > .container {
+    zoom: 0.9;
+  }
+}
+@media (min-width: 1200px) and (max-height: 730px) {
+  .section-service-2 > .container {
+    zoom: 0.84;
+  }
+}
+@media (min-width: 1200px) and (max-height: 680px) {
+  .section-service-2 > .container {
+    zoom: 0.76;
+  }
+}
+@media (min-width: 1200px) and (max-height: 620px) {
+  .section-service-2 > .container {
+    zoom: 0.68;
   }
 }
 

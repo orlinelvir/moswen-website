@@ -78,76 +78,6 @@
 
         startClocks(".clock");
     };
-    /* Cursor Trail
-    -------------------------------------------------------------------------*/
-    var cursorTrail = () => {
-        const canvas = document.getElementById("trail");
-        if (!canvas) return;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-        let w = window.innerWidth,
-            h = window.innerHeight;
-        canvas.width = w;
-        canvas.height = h;
-
-        let points = [];
-        let ripples = [];
-
-        window.addEventListener("resize", () => {
-            w = window.innerWidth;
-            h = window.innerHeight;
-            canvas.width = w;
-            canvas.height = h;
-        });
-
-        window.addEventListener("mousemove", (e) => {
-            points.push({ x: e.clientX, y: e.clientY });
-            if (points.length > 10) points.shift();
-        });
-
-        window.addEventListener("click", (e) => {
-            ripples.push({
-                x: e.clientX,
-                y: e.clientY,
-                radius: 0,
-                alpha: 1,
-            });
-        });
-
-        function draw() {
-            ctx.clearRect(0, 0, w, h);
-
-            if (points.length > 1) {
-                ctx.beginPath();
-                ctx.moveTo(points[0].x, points[0].y);
-                for (let i = 1; i < points.length; i++) {
-                    ctx.lineTo(points[i].x, points[i].y);
-                }
-                let last = points[points.length - 1];
-                let grad = ctx.createLinearGradient(points[0].x, points[0].y, last.x, last.y);
-                grad.addColorStop(0, "black");
-                grad.addColorStop(1, "white");
-                ctx.strokeStyle = grad;
-                ctx.lineWidth = 3;
-                ctx.lineCap = "round";
-                ctx.stroke();
-            }
-
-            ripples.forEach((r, i) => {
-                ctx.beginPath();
-                ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
-                ctx.strokeStyle = `rgba(255,255,255,${r.alpha})`;
-                ctx.lineWidth = 2;
-                ctx.stroke();
-                r.radius += 1;
-                r.alpha -= 0.02;
-            });
-            ripples = ripples.filter((r) => r.alpha > 0);
-
-            requestAnimationFrame(draw);
-        }
-        draw();
-    };
     /* Counter Odo
     -------------------------------------------------------------------------*/
     var counterOdo = () => {
@@ -237,7 +167,46 @@
             $wrap.find('input[type="hidden"]').val(selectedValue);
         });
     };
-    /* Form Submit — sends lead to /api/crm (Resend email notification)
+    /* Attribution capture (UTM, click ids and referral code), kept 30 days in localStorage
+    -------------------------------------------------------------------------*/
+    var ATTR_KEY = "moswen_attr";
+    var ATTR_TTL = 30 * 24 * 60 * 60 * 1000;
+    var readAttribution = function () {
+        try {
+            var a = JSON.parse(localStorage.getItem(ATTR_KEY) || "null");
+            if (a && a.ts && Date.now() - a.ts < ATTR_TTL) return a;
+        } catch (e) {}
+        return {};
+    };
+    var captureAttribution = function () {
+        try {
+            var params = new URLSearchParams(window.location.search);
+            var campaignKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "fbclid", "gclid"];
+            var attr = readAttribution();
+            if (!attr.ts) {
+                attr = { ts: Date.now(), landing: window.location.pathname, referrer: (document.referrer || "").slice(0, 200) };
+            }
+            var hasCampaign = false;
+            campaignKeys.forEach(function (k) {
+                var v = params.get(k);
+                if (v) { attr[k] = v.slice(0, 100); hasCampaign = true; }
+            });
+            if (hasCampaign) attr.landing = window.location.pathname;
+            var ref = params.get("ref");
+            if (ref) attr.ref = ref.slice(0, 40);
+            localStorage.setItem(ATTR_KEY, JSON.stringify(attr));
+        } catch (e) {}
+    };
+    /* Preselect the service in the contact form from any [data-interes] link
+    -------------------------------------------------------------------------*/
+    var initServicePreselect = function () {
+        $(document).on("click", "[data-interes]", function () {
+            var value = $(this).attr("data-interes");
+            var $select = $(".form-cta select[name='interes']").first();
+            if ($select.length && value) $select.val(value);
+        });
+    };
+    /* Form Submit — validates, sends the lead to /api/crm and goes to /gracias
     -------------------------------------------------------------------------*/
     var initFormCrmSubmit = function () {
         $(".form-cta").on("submit", function (e) {
@@ -250,47 +219,60 @@
             var formData = {};
             $form.find("input[name], textarea[name], select[name]").each(function () {
                 var name = $(this).attr("name");
-                var val = $(this).val();
-                formData[name] = val;
+                if (this.type === "checkbox") {
+                    formData[name] = this.checked ? $(this).val() : "";
+                } else {
+                    formData[name] = $(this).val();
+                }
             });
+
+            // Attribution and source
+            var attr = readAttribution();
+            formData.fuente = formData.fuente || window.location.pathname || "/";
+            if (attr.ref) formData.referido = attr.ref;
+            ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "fbclid"].forEach(function (k) {
+                if (attr[k]) formData[k] = attr[k];
+            });
+            if (attr.landing) formData.landing = attr.landing;
+            if (attr.referrer) formData.referrer = attr.referrer;
+
+            // Inline error area
+            var $error = $form.find(".form-error");
+            if (!$error.length) {
+                $error = $('<p class="form-error text-primary mt-3 mb-0" role="alert" style="display:none;"></p>');
+                $form.find(".form-action").prepend($error);
+            }
+            $error.hide();
 
             // Prevent double submission
             $button.prop("disabled", true).html('<span class="text-caption">ENVIANDO...</span>');
 
-            // Send to our secure Vercel endpoint
             fetch("/api/crm", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData)
             })
             .then(function (response) {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error("Error en el servidor");
-            })
-            .then(function (data) {
-                if (typeof fbq === "function") {
-                    fbq("track", "Lead", {
-                        content_name: formData.interes || undefined
-                    });
-                }
-                alert("¡Gracias! Tu mensaje ha sido enviado con éxito y un asesor te contactará.");
-                $form[0].reset();
-                // Reset select current text if any
-                $form.find(".nice-select .current").each(function () {
-                    var placeholder = $(this).siblings(".list").find(".option.disabled").text() || "Selecciona...";
-                    $(this).text(placeholder);
+                if (response.ok) return response.json();
+                return response.json().catch(function () { return {}; }).then(function (d) {
+                    throw new Error(d.error || "Error en el servidor");
                 });
-                $form.find('input[type="hidden"]').val('');
+            })
+            .then(function () {
+                try {
+                    sessionStorage.setItem("moswen_lead", JSON.stringify({
+                        nombre: formData.nombre || "",
+                        email: formData.email || "",
+                        telefono: formData.telefono || "",
+                        interes: formData.interes || "",
+                        ts: Date.now()
+                    }));
+                } catch (err) {}
+                window.location.href = "/gracias";
             })
             .catch(function (error) {
                 console.error("Error submitting form:", error);
-                alert("Hubo un error al enviar tu mensaje. Por favor escríbenos directamente a info@moswen.app.");
-            })
-            .finally(function () {
+                $error.text("No pudimos enviar tu solicitud. Revisa tus datos o escríbenos a info@moswen.app o por WhatsApp.").show();
                 $button.prop("disabled", false).html(originalText);
             });
         });
@@ -421,13 +403,14 @@
     $(function () {
         infiniteSlide();
         updateClock();
-        cursorTrail();
         goTop();
         // settingColor();
         counterOdo();
         openMbMenu();
         clickActive();
         syncNiceSelectHidden();
+        captureAttribution();
+        initServicePreselect();
         initFormCrmSubmit();
         initScrollLinks();
         injectWhatsAppWidget();
