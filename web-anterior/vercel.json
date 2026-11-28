@@ -1,0 +1,7 @@
+{
+  "cleanUrls": true,
+  "redirects": [
+    { "source": "/reparacion-credito", "destination": "/", "permanent": true },
+    { "source": "/reparacion-credito.html", "destination": "/", "permanent": true }
+  ]
+}

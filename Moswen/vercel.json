@@ -1,7 +1,10 @@
 {
-  "cleanUrls": true,
+  "framework": "nextjs",
   "redirects": [
-    { "source": "/reparacion-credito", "destination": "/", "permanent": true },
-    { "source": "/reparacion-credito.html", "destination": "/", "permanent": true }
+    { "source": "/desarrollo-web-apps", "destination": "/servicios", "permanent": false },
+    { "source": "/identidad-visual-branding", "destination": "/servicios", "permanent": false },
+    { "source": "/marketing-estrategia-digital", "destination": "/servicios", "permanent": false },
+    { "source": "/consultoria-negocios", "destination": "/servicios", "permanent": false },
+    { "source": "/brokers", "destination": "/servicios", "permanent": false }
   ]
 }
